@@ -16,7 +16,11 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((requests) -> {
-            ((AuthorizeHttpRequestsConfigurer.AuthorizedUrl)requests.anyRequest()).authenticated();
+            ((AuthorizeHttpRequestsConfigurer.AuthorizedUrl)requests
+                    .requestMatchers("/contact").permitAll()
+                    .requestMatchers("/public/**").permitAll()
+                    .requestMatchers("/admin/**").denyAll()
+                    .anyRequest()).authenticated();
         });
 //        http.formLogin(Customizer.withDefaults());
         http.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
